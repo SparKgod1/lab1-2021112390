@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.BufferedReader;
 import java.io.FileInputStream;
@@ -11,19 +12,26 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.io.FileWriter;
 
+import com.mxgraph.layout.mxIGraphLayout;
+import com.mxgraph.layout.mxOrganicLayout;
+import com.mxgraph.swing.mxGraphComponent;
+import com.mxgraph.util.mxCellRenderer;
 import org.jgrapht.Graph;
+import org.jgrapht.ext.JGraphXAdapter;
 import org.jgrapht.graph.DefaultDirectedWeightedGraph;
 import org.jgrapht.graph.DefaultWeightedEdge;
-import org.jungrapht.visualization.VisualizationModel;
-import org.jungrapht.visualization.VisualizationScrollPane;
-import org.jungrapht.visualization.VisualizationViewer;
-import org.jungrapht.visualization.layout.algorithms.KKLayoutAlgorithm;
-import org.jungrapht.visualization.renderers.Renderer;
+import javax.imageio.ImageIO;
 
 import javax.swing.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.*;
+import java.util.*;
 
+public class Main extends JFrame {
 
-public class Main {
+    private JTextArea inputTextArea;
+    private JButton processButton;
 
     public static HashMap<String, Integer> name = new HashMap<String, Integer>();
 
@@ -33,137 +41,135 @@ public class Main {
 
     public static HashMap<String, ArrayList<String>> aid;
 
-    public static String[] readFile(String args) throws IOException{
-        File file = new File(args);
-        FileInputStream fis = new FileInputStream(file);
-        InputStreamReader isr = new InputStreamReader(fis);
-        BufferedReader br = new BufferedReader(isr);
+    public static String[] readFromString(String inputString) throws IOException {
+        StringBuilder total = new StringBuilder();
+        StringReader sr = new StringReader(inputString);
 
-        String total = "";
+        BufferedReader br = new BufferedReader(sr);
         String line;
-        while ((line = br.readLine()) != null){
+        while ((line = br.readLine()) != null) {
             line = line.replaceAll("[^a-zA-Z]", " ");
-            total += line + " ";
+            total.append(line).append(" ");
         }
-        total = total.replaceAll("\\s\\s+", " ");
-        return total.toLowerCase().split(" ");
+        String result = total.toString().trim();
+        result = result.replaceAll("\\s\\s+", " ");
+        return result.toLowerCase().split(" ");
     }
 
-    public static HashMap<String, Integer> counting(String[] lists){
+    public static HashMap<String, Integer> counting(String[] lists) {
         HashMap<String, Integer> Sites = new HashMap<String, Integer>();
         name.put(lists[0], 1);
-        for(int i = 0; i < lists.length - 1; i++){
+        for (int i = 0; i < lists.length - 1; i++) {
             if (!name.containsKey(lists[i + 1])) name.put(lists[i + 1], 1);
             String cur = lists[i];
             String next = lists[i + 1];
             String combine = cur + "_" + next;
-            if(Sites.containsKey(combine)) Sites.replace(combine, Sites.get(combine) + 1);
+            if (Sites.containsKey(combine)) Sites.replace(combine, Sites.get(combine) + 1);
             else Sites.put(combine, 1);
         }
         return Sites;
     }
 
-    public static HashMap<String, ArrayList<String>> preProcess(HashMap<String, Integer> site){
+    public static HashMap<String, ArrayList<String>> preProcess(HashMap<String, Integer> site) {
         HashMap<String, ArrayList<String>> res = new HashMap<String, ArrayList<String>>();
-        for (String s: site.keySet()){
+        for (String s : site.keySet()) {
             String[] lists = s.split("_");
             if (res.containsKey(lists[0])) {
                 ArrayList<String> n = res.get(lists[0]);
                 n.add(lists[1]);
                 res.replace(lists[0], n);
-            }
-            else res.put(lists[0], new ArrayList<>(Arrays.asList(lists[1])));
+            } else res.put(lists[0], new ArrayList<>(Arrays.asList(lists[1])));
         }
         return res;
     }
 
 
-    public static void showGraph(Graph<?, ?> g) {
-        JFrame f = new JFrame();
-        f.setLayout(new BorderLayout());
-        Dimension size = new Dimension(1000, 1000);
-        VisualizationModel<?, ?> vm =
-                VisualizationModel.builder(g)
-                        .layoutAlgorithm(new KKLayoutAlgorithm<>())
-                        .layoutSize(size)
-                        .build();
-        final VisualizationViewer<?, ?> vv =
-                VisualizationViewer
-                        .builder(vm)
-                        .viewSize(size)
-                        .build();
-        vv.getRenderContext().setVertexLabelFunction(Object::toString);
-        vv.getRenderContext().setVertexLabelPosition(Renderer.VertexLabel.Position.CNTR);
-        vv.setVertexToolTipFunction(Object::toString);
-        VisualizationScrollPane visualizationScrollPane = new VisualizationScrollPane(vv);
-        f.add(visualizationScrollPane);
+    public static class MyEdge extends DefaultWeightedEdge {
+        @Override
+        public String toString() {
+            return String.valueOf(getWeight());
+        }
+    }
 
-        f.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        f.pack();
-        f.setVisible(true);
+    public static void showGraph(Graph<String, MyEdge> g) throws IOException {
+        JFrame frame = new JFrame("DemoGraph");
+        JGraphXAdapter<String, MyEdge> graphAdapter = new JGraphXAdapter<>(g);
+        mxIGraphLayout layout = new mxOrganicLayout(graphAdapter);
+        layout.execute(graphAdapter.getDefaultParent());
+        frame.add(new mxGraphComponent(graphAdapter));
+        frame.setSize(new Dimension(800, 600));
+        frame.pack();
+        frame.setLocationByPlatform(true);
+        frame.setVisible(true);
+        BufferedImage image =
+                mxCellRenderer.createBufferedImage(graphAdapter, null, 2, Color.WHITE, true, null);
+        File imgFile = new File("F:\\JetBrains\\projects\\lab1\\src\\main\\resources\\graph.png");
+        ImageIO.write(image, "PNG", imgFile);
     }
 
 
-    public static void showDirectedGraph(HashMap<String, Integer> site){
-        Graph<String, DefaultWeightedEdge> graph = new DefaultDirectedWeightedGraph<>(DefaultWeightedEdge.class);
+    public static void showDirectedGraph(HashMap<String, Integer> site) throws IOException {
+        Graph<String, MyEdge> graph = new DefaultDirectedWeightedGraph<>(MyEdge.class);
         List<String> stringList = new ArrayList<>(name.keySet());
-        for(String nodeName : stringList){
+        for (String nodeName : stringList) {
             graph.addVertex(nodeName);
         }
-        for(String src_dest : site.keySet()){
-            Double value = (double)site.get(src_dest);
+        for (String src_dest : site.keySet()) {
+            Double value = (double) site.get(src_dest);
             String[] parts = src_dest.split("_");
-            assert(parts.length == 2);
+            assert (parts.length == 2);
             String src = parts[0];
             String dest = parts[1];
-            DefaultWeightedEdge weightedEdge = graph.addEdge(src, dest);
+            MyEdge weightedEdge = graph.addEdge(src, dest);
             graph.setEdgeWeight(weightedEdge, value);
         }
         showGraph(graph);
     }
 
 
-    public static ArrayList<String> queryBridgeWords(String word1, String word2){
+    public static ArrayList<String> queryBridgeWords(String word1, String word2) {
         ArrayList<String> res = new ArrayList<String>();
-        if (!name.containsKey(word1) || !name.containsKey(word2)){
+        if (!name.containsKey(word1) || !name.containsKey(word2)) {
             System.out.println("No word1 or word2 in the graph!");
             return res;
         }
-        ArrayList<String> mid = aid.get(word1);
-        for(String s: mid){
-            if (aid.get(s).contains(word2)) res.add(s);
-        }
 
-        return res;
+        if (aid.containsKey(word1)) {
+            ArrayList<String> mid = aid.get(word1);
+            for (String s : mid) {
+                if (aid.containsKey(s) && aid.get(s).contains(word2)) res.add(s);
+            }
+            return res;
+        } else return res;
     }
 
-    public static void printBridge(ArrayList<String> res){
+    public static void printBridge(ArrayList<String> res) {
         if (res.isEmpty()) System.out.println("No bridge words from word1 to word2!");
         else {
             System.out.println("The bridge words from word1 to word2 are:");
-            for(String s: res) System.out.println(s);
+            for (String s : res) System.out.println(s);
         }
     }
 
-    public static void generateNewText(String inputText){
+    public static void generateNewText(String inputText) {
         Random random = new Random();
         List<String> lists = new ArrayList<String>(List.of(inputText.toLowerCase().split(" ")));
-        for(int i = 0; i < lists.size() - 1; i++){
+        for (int i = 0; i < lists.size() - 1; i++) {
             String combine = lists.get(i) + "_" + lists.get(i + 1);
             if (!bridge.containsKey(combine)) continue;
             int ran = random.nextInt(100);
             ArrayList<String> st = bridge.get(combine);
-            lists.add(i+1, st.get(ran%st.size()));
+            lists.add(i + 1, st.get(ran % st.size()));
             i++;
         }
         System.out.println(String.join(" ", lists));
     }
 
-    public static HashMap<String, ArrayList<String>> buildBridge(){
+    public static HashMap<String, ArrayList<String>> buildBridge() {
         HashMap<String, ArrayList<String>> res = new HashMap<>();
         List<String> stringList = new ArrayList<>(name.keySet());
-        for (int i = 0; i < name.keySet().size(); i++){
-            for(int j = 0; j < name.keySet().size(); j++){
+        for (int i = 0; i < name.keySet().size(); i++) {
+            for (int j = 0; j < name.keySet().size(); j++) {
                 ArrayList<String> bri = queryBridgeWords(stringList.get(i), stringList.get(j));
                 if (bri.isEmpty()) continue;
                 String conbine = stringList.get(i) + "_" + stringList.get(j);
@@ -173,7 +179,7 @@ public class Main {
         return res;
     }
 
-    public static String calcShortestPath(String word1, String word2){
+    public static String calcShortestPath(String word1, String word2) {
         // 采用单源dijkstra算法
         ArrayList<String> s = new ArrayList<String>(List.of(word1));
         // 到达word1的距离
@@ -181,14 +187,14 @@ public class Main {
         HashMap<String, String> route = new HashMap<String, String>();
         String shortest_name = "";
         int shortest_int = 0xffff;
-        for (String str: aid.get(word1)){
+        for (String str : aid.get(word1)) {
             String combine = word1 + "_" + str;
             distance.put(str, site.get(combine));
-            shortest_int = (shortest_int < site.get(combine))? shortest_int:site.get(combine);
-            shortest_name = (shortest_int < site.get(combine))? shortest_name:str;
+            shortest_int = (shortest_int < site.get(combine)) ? shortest_int : site.get(combine);
+            shortest_name = (shortest_int < site.get(combine)) ? shortest_name : str;
             route.put(str, word1 + "->" + str);
         }
-        for(int i = 1; i < name.keySet().size() - 1; i++){
+        for (int i = 1; i < name.keySet().size() - 1; i++) {
             if (shortest_name.equals(word2)) break;
             s.add(shortest_name);
             String preShort_name = shortest_name;
@@ -197,29 +203,29 @@ public class Main {
             shortest_int = 0xffff;
             if (!aid.keySet().contains(preShort_name)) {
                 //重新选举最小距离，并继续
-                for (String s_elect: distance.keySet()){
+                for (String s_elect : distance.keySet()) {
                     if (s.contains(s_elect)) continue;
-                    shortest_int = (shortest_int < distance.get(s_elect))?shortest_int:distance.get(s_elect);
-                    shortest_name = (shortest_int < distance.get(s_elect))?shortest_name:s_elect;
+                    shortest_int = (shortest_int < distance.get(s_elect)) ? shortest_int : distance.get(s_elect);
+                    shortest_name = (shortest_int < distance.get(s_elect)) ? shortest_name : s_elect;
                 }
                 continue;
             }
-            for(String str: aid.get(preShort_name)){
+            for (String str : aid.get(preShort_name)) {
                 String combine = preShort_name + "_" + str;
                 try {
                     if (distance.get(str) > preShort_int + site.get(combine)) {
                         distance.replace(str, preShort_int + site.get(combine));
                         route.replace(str, route.get(preShort_name) + "->" + str);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     distance.put(str, preShort_int + site.get(combine));
                     route.put(str, route.get(preShort_name) + "->" + str);
                 }
             }
-            for (String s_elect: distance.keySet()){
+            for (String s_elect : distance.keySet()) {
                 if (s.contains(s_elect)) continue;
-                shortest_int = (shortest_int < distance.get(s_elect))?shortest_int:distance.get(s_elect);
-                shortest_name = (shortest_int < distance.get(s_elect))?shortest_name:s_elect;
+                shortest_int = (shortest_int < distance.get(s_elect)) ? shortest_int : distance.get(s_elect);
+                shortest_name = (shortest_int < distance.get(s_elect)) ? shortest_name : s_elect;
             }
         }
         return route.getOrDefault(word2, "unreachable");
@@ -233,10 +239,10 @@ public class Main {
         String total = cursor;
         ArrayList<String> edge = new ArrayList<String>();
         boolean flag = true;
-        while(flag){
+        while (flag) {
             ran = random.nextInt(100);
             List<String> next = aid.get(cursor);
-            if (!aid.containsKey(cursor)){
+            if (!aid.containsKey(cursor)) {
                 flag = false;
                 continue;
             }
@@ -252,34 +258,62 @@ public class Main {
         return total;
     }
 
-    public static void main(String[] args) throws IOException {
 
+    public Main() {
+        name = new HashMap<>();
+        bridge = new HashMap<>();
+        site = new HashMap<>();
+        aid = new HashMap<>();
 
-        String[] lines = readFile("F:\\JetBrains\\projects\\lab1\\src\\main\\resources\\test.txt");
+        setTitle("Text Processing with GUI");
+        setSize(400, 300);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLayout(new BorderLayout());
 
-        site = counting(lines);
+        inputTextArea = new JTextArea();
+        add(new JScrollPane(inputTextArea), BorderLayout.CENTER);
 
-        showDirectedGraph(site);
+        processButton = new JButton("Process Text");
+        processButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                try {
+                    String text = inputTextArea.getText();
+                    String[] lines = readFromString(text);
+                    site = counting(lines);
+                    // 读入文本，1
+                    showDirectedGraph(site);
+                    // 展示图，2
+                    aid = preProcess(site);
 
-        aid = preProcess(site);
+                    ArrayList<String> bri = queryBridgeWords("new", "to");
 
-        ArrayList<String> bri = queryBridgeWords("new", "to");
+                    printBridge(bri);
+                    // 查询桥接词,3
+                    bridge = buildBridge();
+//sblab1
+                    generateNewText("Seek to explore new and exciting synergies");
+                    // 生成新文本，4
+                    System.out.println(calcShortestPath("to", "and"));
+                    // 计算最短路径，5
+                    System.out.println(randomWalk());
+                    // 随机游走， 6
+                    System.out.println("Text processed.");
+                } catch (Exception ex) {
+                    ex.printStackTrace();
+                }
+            }
+        });
 
-        printBridge(bri);
+        add(processButton, BorderLayout.SOUTH);
+    }
 
-        bridge = buildBridge();
-
-        generateNewText("Seek to explore new and exciting synergies");
-
-        System.out.println(calcShortestPath("to", "and"));
-
-        System.out.println(randomWalk());
-//        for (String s: bridge){
-//            System.out.println(s + '\n');
-//        }
-
-//        aid.forEach((key, value) -> {System.out.println("\nkey: " + key + "\tvalue: " + value);});
-
-
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new Main().setVisible(true);
+            }
+        });
     }
 }
