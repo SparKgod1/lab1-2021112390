@@ -291,7 +291,7 @@ public class Main extends JFrame {
                     printBridge(bri);
                     // 查询桥接词,3
                     bridge = buildBridge();
-//sblab1
+
                     generateNewText("Seek to explore new and exciting synergies");
                     // 生成新文本，4
                     System.out.println(calcShortestPath("to", "and"));
