@@ -290,11 +290,6 @@ public class Main extends JFrame {
                     ArrayList<String> bri = queryBridgeWords("seek", "new");
                     printBridge(bri, "seek", "new");
                     bridge = buildBridge();
-<<<<<<< HEAD
-=======
-//sblab1
-                    generateNewText("Seek to explore new and exciting synergies");
->>>>>>> parent of 3a00b19 (change)
                     // 生成新文本，4
                     generateNewText("explore strange new worlds,seek life and civilizations");
                     // 计算最短路径，5
