@@ -4,9 +4,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1f1e13-0945-44cb-901f-caf990c9e61e" name="Changes" comment="">
+    <list default="true" id="0c1f1e13-0945-44cb-901f-caf990c9e61e" name="Changes" comment="change">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/graph.png" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/graph.png" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/test.txt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/resources/test.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/to.txt" beforeDir="false" afterPath="$PROJECT_DIR$/to.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,8 +119,21 @@
       <workItem from="1715421515192" duration="864000" />
       <workItem from="1715608478850" duration="237000" />
       <workItem from="1716299540832" duration="2221000" />
-      <workItem from="1716309143309" duration="1312000" />
+      <workItem from="1716309143309" duration="2176000" />
+      <workItem from="1716343140051" duration="2745000" />
+      <workItem from="1716526751433" duration="83000" />
+      <workItem from="1716528051161" duration="119000" />
+      <workItem from="1716531787196" duration="110000" />
+      <workItem from="1716862309314" duration="2313000" />
     </task>
+    <task id="LOCAL-00001" summary="change">
+      <created>1716312053438</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1716312053438</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -133,6 +149,10 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="change" />
+    <option name="LAST_COMMIT_MESSAGE" value="change" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

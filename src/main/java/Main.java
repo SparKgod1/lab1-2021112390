@@ -97,7 +97,7 @@ public class Main extends JFrame {
         mxIGraphLayout layout = new mxOrganicLayout(graphAdapter);
         layout.execute(graphAdapter.getDefaultParent());
         frame.add(new mxGraphComponent(graphAdapter));
-        frame.setSize(new Dimension(800, 600));
+        frame.setSize(800, 600);
         frame.pack();
         frame.setLocationByPlatform(true);
         frame.setVisible(true);
@@ -143,10 +143,10 @@ public class Main extends JFrame {
         } else return res;
     }
 
-    public static void printBridge(ArrayList<String> res) {
+    public static void printBridge(ArrayList<String> res,String word1, String word2) {
         if (res.isEmpty()) System.out.println("No bridge words from word1 to word2!");
         else {
-            System.out.println("The bridge words from word1 to word2 are:");
+            System.out.println("The bridge words from "+ word1+ " to "+ word2+" are:");
             for (String s : res) System.out.println(s);
         }
     }
@@ -187,6 +187,7 @@ public class Main extends JFrame {
         HashMap<String, String> route = new HashMap<String, String>();
         String shortest_name = "";
         int shortest_int = 0xffff;
+        if(!aid.containsKey(word1)) return "unreachable";
         for (String str : aid.get(word1)) {
             String combine = word1 + "_" + str;
             distance.put(str, site.get(combine));
@@ -280,25 +281,22 @@ public class Main extends JFrame {
                 try {
                     String text = inputTextArea.getText();
                     String[] lines = readFromString(text);
-                    site = counting(lines);
                     // 读入文本，1
-                    showDirectedGraph(site);
+                    site = counting(lines);
                     // 展示图，2
+                    showDirectedGraph(site);
                     aid = preProcess(site);
-
-                    ArrayList<String> bri = queryBridgeWords("new", "to");
-
-                    printBridge(bri);
                     // 查询桥接词,3
+                    ArrayList<String> bri = queryBridgeWords("seek", "new");
+                    printBridge(bri, "seek", "new");
                     bridge = buildBridge();
-
-                    generateNewText("Seek to explore new and exciting synergies");
                     // 生成新文本，4
-                    System.out.println(calcShortestPath("to", "and"));
+                    generateNewText("explore strange new worlds,seek life and civilizations");
                     // 计算最短路径，5
-                    System.out.println(randomWalk());
+                    System.out.println(calcShortestPath("civilizations", "and"));
                     // 随机游走， 6
-                    System.out.println("Text processed.");
+                    System.out.println(randomWalk());
+                    System.out.println("-----------Text processed-----------");
                 } catch (Exception ex) {
                     ex.printStackTrace();
                 }
