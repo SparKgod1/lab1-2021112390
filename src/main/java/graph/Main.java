@@ -1,10 +1,10 @@
+package graph;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.BufferedReader;
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.util.Arrays;
 import java.util.List;
 import java.util.HashMap;
@@ -26,7 +26,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import java.util.*;
 
 public class Main extends JFrame {
 
@@ -54,6 +53,22 @@ public class Main extends JFrame {
         String result = total.toString().trim();
         result = result.replaceAll("\\s\\s+", " ");
         return result.toLowerCase().split(" ");
+    }
+
+    public static String[] readFile(String args) throws IOException{
+        File file = new File(args);
+        FileInputStream fis = new FileInputStream(file);
+        InputStreamReader isr = new InputStreamReader(fis);
+        BufferedReader br = new BufferedReader(isr);
+
+        String total = "";
+        String line;
+        while ((line = br.readLine()) != null){
+            line = line.replaceAll("[^a-zA-Z]", " ");
+            total += line + " ";
+        }
+        total = total.replaceAll("\\s\\s+", " ");
+        return total.toLowerCase().split(" ");
     }
 
     public static HashMap<String, Integer> counting(String[] lists) {
@@ -235,21 +250,29 @@ public class Main extends JFrame {
         Random random = new Random();
         List<String> stringList = new ArrayList<>(aid.keySet());
         int ran = random.nextInt(100);
+        if (stringList.size() == 0) return "";
         String cursor = stringList.get(ran % stringList.size());
+        List<String> total_key = new ArrayList<>(List.of(cursor));
         String total = cursor;
         ArrayList<String> edge = new ArrayList<String>();
         boolean flag = true;
         while (flag) {
             ran = random.nextInt(100);
             List<String> next = aid.get(cursor);
-            if (!aid.containsKey(cursor)) {
+            if (next == null || next.size() == 0) {
                 flag = false;
                 continue;
             }
-            if (edge.contains(cursor + " " + next.get(ran % next.size()))) flag = false;
-            edge.add(cursor + " " + next.get(ran % next.size()));
-            cursor = next.get(ran % next.size());
+            String next_key = next.get(ran % next.size());
+            if (!aid.containsKey(cursor) || total_key.contains(next_key)) {
+                flag = false;
+                continue;
+            }
+            if (edge.contains(cursor + " " + next_key)) flag = false;
+            edge.add(cursor + " " + next_key);
+            cursor = next_key;
             total += " " + cursor;
+            total_key.add(cursor);
         }
         String fileName = "to.txt";
         FileWriter writer = new FileWriter(fileName);
