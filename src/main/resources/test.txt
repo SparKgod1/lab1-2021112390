@@ -1,8 +1,11 @@
 To @ explore strange new worlds,
+<<<<<<< HEAD
 To seek out new life and new civilizations?
 To @ explore strange new worlds,
 To seek out new life and new civilizations?
 To @ explore strange new worlds,
 To seek out new life and new civilizations?
 To @ explore strange new worlds,
+=======
+>>>>>>> Lab3w
 To seek out new life and new civilizations?

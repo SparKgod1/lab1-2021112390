@@ -1,1 +1,5 @@
+<<<<<<< HEAD
 out new worlds to
+=======
+a b c d
+>>>>>>> Lab3w

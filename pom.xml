@@ -47,7 +47,11 @@
     <dependency>
       <groupId>junit</groupId>
       <artifactId>junit</artifactId>
+<<<<<<< HEAD
       <version>3.8.1</version>
+=======
+      <version>4.13</version>
+>>>>>>> Lab3w
       <scope>test</scope>
     </dependency>
     <dependency>
