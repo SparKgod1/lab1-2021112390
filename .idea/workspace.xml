@@ -4,7 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="0c1f1e13-0945-44cb-901f-caf990c9e61e" name="Changes" comment="change" />
+    <list default="true" id="0c1f1e13-0945-44cb-901f-caf990c9e61e" name="Changes" comment="change">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/graph/MainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/graph/MainTest.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,7 +68,7 @@
       <command value="mvn test" />
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.RandomWalkTest">
+  <component name="RunManager" selected="JUnit.MainTest">
     <configuration name="MainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="lab1-2021112390" />
       <extension name="coverage">
@@ -77,6 +80,22 @@
       <option name="PACKAGE_NAME" value="graph" />
       <option name="MAIN_CLASS_NAME" value="graph.MainTest" />
       <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="MainTest.queryBridgeWords" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="lab1-2021112390" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="graph.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="graph" />
+      <option name="MAIN_CLASS_NAME" value="graph.MainTest" />
+      <option name="METHOD_NAME" value="queryBridgeWords" />
+      <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -107,22 +126,6 @@
       <option name="PACKAGE_NAME" value="graph" />
       <option name="MAIN_CLASS_NAME" value="graph.RandomWalkTest" />
       <option name="METHOD_NAME" value="testRandomWalkComplexGraph" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="RandomWalkTest.testRandomWalkNoCycles" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="lab1-2021112390" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="graph.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="graph" />
-      <option name="MAIN_CLASS_NAME" value="graph.RandomWalkTest" />
-      <option name="METHOD_NAME" value="testRandomWalkNoCycles" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -171,11 +174,11 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.RandomWalkTest" />
-        <item itemvalue="JUnit.RandomWalkTest.testRandomWalkComplexGraph" />
         <item itemvalue="JUnit.MainTest" />
+        <item itemvalue="JUnit.RandomWalkTest" />
+        <item itemvalue="JUnit.MainTest.queryBridgeWords" />
+        <item itemvalue="JUnit.RandomWalkTest.testRandomWalkComplexGraph" />
         <item itemvalue="JUnit.RandomWalkTest.testRandomWalkTwoNodes" />
-        <item itemvalue="JUnit.RandomWalkTest.testRandomWalkNoCycles" />
       </list>
     </recent_temporary>
   </component>
@@ -199,6 +202,8 @@
       <workItem from="1718093058021" duration="6366000" />
       <workItem from="1718099458789" duration="305000" />
       <workItem from="1718099772628" duration="628000" />
+      <workItem from="1718128592798" duration="176000" />
+      <workItem from="1718158700007" duration="2017000" />
     </task>
     <task id="LOCAL-00001" summary="change">
       <created>1716312053438</created>
@@ -243,10 +248,10 @@
     <select />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/lab1_2021112390$RandomWalkTest.ic" NAME="RandomWalkTest Coverage Results" MODIFIED="1718099281457" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/lab1_2021112390$RandomWalkTest.ic" NAME="RandomWalkTest Coverage Results" MODIFIED="1718159699218" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>graph.*</FILTER>
     </SUITE>
-    <SUITE FILE_PATH="coverage/lab1_2021112390$MainTest.ic" NAME="MainTest Coverage Results" MODIFIED="1718098570293" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+    <SUITE FILE_PATH="coverage/lab1_2021112390$MainTest.ic" NAME="MainTest Coverage Results" MODIFIED="1718160101499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
       <FILTER>graph.*</FILTER>
     </SUITE>
   </component>
